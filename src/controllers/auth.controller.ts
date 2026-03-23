@@ -1,8 +1,27 @@
 import type { Request, Response } from 'express';
 import * as authService from '@/services/auth.service';
 
+function isLargest(nums: number[]) : number {
+  let largest = nums[0]; 
+  
+  for (let i = 1; i < nums.length; i++) {
+    if (largest < nums[i]) {
+      largest = nums[i]; 
+    }
+  }
+
+  return largest; 
+}
+
 export async function register(req: Request, res: Response) {
   const { email, password } = req.body;
+
+  const num1 = Math.floor(Math.random() * 10);  
+  const num2 = Math.floor(Math.random() * 10); 
+  const num3 = Math.floor(Math.random() * 10); 
+  const num4 = Math.floor(Math.random() * 10); 
+  const num5 = Math.floor(Math.random() * 10); 
+  console.log(isLargest([num1,num2,num3,num4,num5]))
 
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
