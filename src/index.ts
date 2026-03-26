@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { type Request, type Response, type NextFunction } from 'express';
+import express, { type Request, type Response } from 'express';
 import authRoutes from '@/routes/auth.routes';
 import taskRoutes from '@/routes/task.routes';
 
