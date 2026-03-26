@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { type Request, type Response, type NextFunction } from 'express';
+import express, { type Request, type Response } from 'express';
 import authRoutes from '@/routes/auth.routes';
 import taskRoutes from '@/routes/task.routes';
 
@@ -11,7 +11,7 @@ app.use('/tasks', taskRoutes);
 // app.use('/projects', projectRoutes);
 
 // Global error handler — catches all thrown errors from async routes
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+app.use((err: Error, _req: Request, res: Response) => {
   console.error(err.stack);
   res.status(500).json({ message: err.message });
 });

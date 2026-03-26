@@ -2,11 +2,9 @@ import type { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '@/utils/token.util';
 import type { Role } from '@/types/auth.types.js';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: { userId: string; email: string; role: Role };
-    }
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: { userId: string; email: string; role: Role };
   }
 }
 
