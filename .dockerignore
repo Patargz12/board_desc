@@ -1,0 +1,20 @@
+# Ignore dependencies - will be installed in the container
+node_modules
+
+# Ignore build output and coverage reports
+dist
+coverage
+
+
+# Ignore log files
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Ignore Docker and Compose files themselves
+Dockerfile
+docker-compose.yml
+
+# Ignore git and related files
+.git
+.gitignore

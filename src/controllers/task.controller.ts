@@ -1,5 +1,18 @@
+
 import type { Request, Response } from 'express';
 import { supabase } from '@/lib/supabase';
+import { z } from 'zod';
+
+const createTaskSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().optional(),
+});
+
+const updateTaskSchema = z.object({
+  title: z.string().min(1, 'Title is required').optional(),
+  description: z.string().optional(),
+  status: z.enum(['pending', 'in_progress', 'completed']).optional(),
+});
 
 // GET /tasks — fetch tasks based on role
 // admin: sees all tasks | member: sees only their own
@@ -45,28 +58,29 @@ export async function getOne(req: Request, res: Response) {
 
 // POST /tasks — create a new task (assigned to the current user)
 export async function create(req: Request, res: Response) {
-  const { title, description } = req.body;
-  const { userId } = req.user!;
-
-  if (!title) {
-    return res.status(400).json({ message: 'Title is required' });
+  const parseResult = createTaskSchema.safeParse(req.body);
+  if (!parseResult.success) {
+    return res.status(400).json({ message: 'Invalid request', errors: parseResult.error.flatten() });
   }
-
+  const { title, description } = parseResult.data;
+  const { userId } = req.user!;
   const { data, error } = await supabase
     .from('tasks')
     .insert({ title, description, user_id: userId, status: 'pending' })
     .select()
     .single();
-
   if (error) return res.status(500).json({ message: error.message });
-
   res.status(201).json(data);
 }
 
 // PUT /tasks/:id — update a task
 export async function update(req: Request, res: Response) {
   const { id } = req.params;
-  const { title, description, status } = req.body;
+  const parseResult = updateTaskSchema.safeParse(req.body);
+  if (!parseResult.success) {
+    return res.status(400).json({ message: 'Invalid request', errors: parseResult.error.flatten() });
+  }
+  const { title, description, status } = parseResult.data;
   const { userId, role } = req.user!;
 
   // Verify task exists first
