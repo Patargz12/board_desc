@@ -45,7 +45,7 @@ export async function login(email: string, password: string): Promise<AuthTokens
 
   // Dummy hash prevents timing attacks when user doesn't exist
   const dummyHash = '$2b$10$invalidhashfortimingprotection000000000000000000000000';
-  const isValid = user
+    const isValid = user
     ? await bcrypt.compare(password, user.password_hash)
     : await bcrypt.compare(password, dummyHash).then(() => false);
 
